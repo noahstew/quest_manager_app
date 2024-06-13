@@ -119,6 +119,11 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                               Dismissible(
                                 onDismissed: (direction) {
                                   setState(() {
+                                    if (userCategories[widget.idx]
+                                        .userTasks[index]
+                                        .isDone) {
+                                      widget.numCompletedTasks--;
+                                    }
                                     userCategories[widget.idx].removeTask(task);
                                   });
                                 },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:todo/models/category.dart';
 import 'package:todo/screens/add_task_screen.dart';
 import 'package:todo/utils.dart';
@@ -17,6 +18,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _userCategoriesBox = Hive.box('userCategories');
+
+  void writeData() {
+    _userCategoriesBox.put('userCategories', userCategories);
+  }
+
+  void readData() {
+    if (_userCategoriesBox.get('userCategories') != null) {
+      userCategories = _userCategoriesBox.get('userCategories');
+    }
+  }
+
+  void deleteData() {
+    _userCategoriesBox.delete('userCategories');
+  }
+
   removeCategory(String id) {
     setState(() {
       userCategories.removeWhere((element) => element.id == id);
@@ -81,40 +98,115 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: userCategories.length,
-                itemBuilder: (context, index) {
-                  bool isExpanded = userCategories[index].isExpanded;
-                  return Column(
-                    children: [
-                      InkWell(
-                        onLongPress: () {
-                          setState(() {
-                            userCategories[index].isExpanded = !isExpanded;
-                          });
-                        },
-                        child: !isExpanded
-                            ? CategoryOverview(
-                                category: userCategories[index],
-                                idx: index,
-                              )
-                            : CategoryDetails(
-                                category: userCategories[index],
-                                idx: index,
-                                numCompletedTasks: userCategories[index]
-                                    .userTasks
-                                    .where((task) => task.isDone)
-                                    .length,
-                              ),
+              userCategories.isEmpty
+                  ? Center(
+                      child: Card(
+                        elevation: 2,
+                        color: themeContext.primaryContainer,
+                        shadowColor: themeContext.primary,
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 16),
+                            Text(
+                              'Welcome to Side Questor!',
+                              style: textStyle(
+                                  30, themeContext.primary, FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              '(Continue reading for how to use)',
+                              style: textStyle(
+                                  16, themeContext.primary, FontWeight.w500),
+                              textAlign: TextAlign.center,
+                            ),
+                            Divider(
+                              color: themeContext.primary,
+                              thickness: 1.0,
+                              indent: 16,
+                              endIndent: 16,
+                            ),
+                            Text(
+                              'Add a category with Manage Categories button below',
+                              style: textStyle(
+                                  20, themeContext.primary, FontWeight.w500),
+                              textAlign: TextAlign.center,
+                            ),
+                            Divider(
+                              color: themeContext.primary,
+                              thickness: 1.0,
+                              indent: 96,
+                              endIndent: 96,
+                            ),
+                            Text(
+                              'Then add tasks to your categories with the + button below',
+                              style: textStyle(
+                                  20, themeContext.primary, FontWeight.w500),
+                              textAlign: TextAlign.center,
+                            ),
+                            Divider(
+                              color: themeContext.primary,
+                              thickness: 1.0,
+                              indent: 96,
+                              endIndent: 96,
+                            ),
+                            Text(
+                              'Delete categories and tasks by swiping them left or right',
+                              style: textStyle(
+                                  20, themeContext.primary, FontWeight.w500),
+                              textAlign: TextAlign.center,
+                            ),
+                            Divider(
+                              color: themeContext.primary,
+                              thickness: 1.0,
+                              indent: 96,
+                              endIndent: 96,
+                            ),
+                            Text(
+                              'Expand categories by long pressing them',
+                              style: textStyle(
+                                  20, themeContext.primary, FontWeight.w500),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 16),
+                          ],
+                        ),
                       ),
-                      if (index != userCategories.length - 1)
-                        const SizedBox(height: 16)
-                    ],
-                  );
-                },
-              ),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: userCategories.length,
+                      itemBuilder: (context, index) {
+                        bool isExpanded = userCategories[index].isExpanded;
+                        return Column(
+                          children: [
+                            InkWell(
+                              onLongPress: () {
+                                setState(() {
+                                  userCategories[index].isExpanded =
+                                      !isExpanded;
+                                });
+                              },
+                              child: !isExpanded
+                                  ? CategoryOverview(
+                                      category: userCategories[index],
+                                      idx: index,
+                                    )
+                                  : CategoryDetails(
+                                      category: userCategories[index],
+                                      idx: index,
+                                      numCompletedTasks: userCategories[index]
+                                          .userTasks
+                                          .where((task) => task.isDone)
+                                          .length,
+                                    ),
+                            ),
+                            if (index != userCategories.length - 1)
+                              const SizedBox(height: 16)
+                          ],
+                        );
+                      },
+                    ),
               ManageCategoriesButton(
                   addCategory: addCategory, removeCategory: removeCategory),
             ],

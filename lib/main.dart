@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todo/screens/home_screen.dart';
 import 'package:todo/utils.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
   runApp(const MyApp());
+
+  var userCategoriesBox = await Hive.openBox('userCategories');
 }
 
 class MyApp extends StatefulWidget {
