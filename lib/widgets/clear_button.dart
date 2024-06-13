@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:todo/data/user_data.dart';
 import 'package:todo/utils.dart';
 
 class ClearButton extends StatelessWidget {
+  final Function() onPressed;
   final int index;
 
-  const ClearButton({required this.index, super.key});
+  const ClearButton({required this.index, required this.onPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +24,7 @@ class ClearButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
         ),
         child: TextButton(
-          onPressed: () {
-            userCategories[index].userTasks.clear();
-          },
+          onPressed: onPressed,
           child: Text(
             'Clear All Quests',
             style: textStyle(

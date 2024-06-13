@@ -7,7 +7,7 @@ class AppColors {
   static const technoBlack = Color.fromARGB(255, 28, 28, 30);
   static const softBlack = Color.fromARGB(255, 48, 45, 45);
   static const lightBlue = Color.fromARGB(255, 102, 215, 252);
-  static const darkBlue = Color.fromARGB(255, 0, 113, 219);
+  static const darkBlue = Color.fromARGB(255, 1, 75, 145);
   static const lightRed = Color.fromARGB(255, 255, 68, 68);
   static const darkRed = Color.fromARGB(255, 156, 0, 0);
 }

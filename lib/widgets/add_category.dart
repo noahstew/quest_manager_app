@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:todo/data/app_data.dart';
+import 'package:todo/models/category.dart';
 import 'package:todo/utils.dart';
 
 class AddCategory extends StatefulWidget {
-  const AddCategory({super.key});
+  final dynamic addCategory;
+  const AddCategory({required this.addCategory, super.key});
 
   @override
   State<AddCategory> createState() => _AddCategoryState();
@@ -11,7 +13,8 @@ class AddCategory extends StatefulWidget {
 
 class _AddCategoryState extends State<AddCategory> {
   final TextEditingController _controller = TextEditingController();
-  var _selectedIcon, _selectedColor;
+  Color? _selectedColor;
+  IconData? _selectedIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +117,15 @@ class _AddCategoryState extends State<AddCategory> {
               borderRadius: BorderRadius.circular(30),
             ),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                final newCategory = Category(
+                  name: _controller.text,
+                  icon: _selectedIcon!,
+                  color: _selectedColor!,
+                );
+                Navigator.pop(context);
+                widget.addCategory(newCategory);
+              },
               child: Text(
                 'Add to Category List',
                 style: textStyle(

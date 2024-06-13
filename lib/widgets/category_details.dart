@@ -6,17 +6,43 @@ import 'package:todo/widgets/clear_button.dart';
 import 'package:todo/widgets/progress_bar.dart';
 import 'package:todo/widgets/quest_card.dart';
 
+// ignore: must_be_immutable
 class CategoryDetails extends StatefulWidget {
   final Category category;
   final int idx;
+  int numCompletedTasks;
 
-  const CategoryDetails({required this.category, required this.idx, super.key});
+  CategoryDetails(
+      {required this.category,
+      required this.idx,
+      required this.numCompletedTasks,
+      super.key});
 
   @override
   State<CategoryDetails> createState() => _CategoryDetailsState();
 }
 
 class _CategoryDetailsState extends State<CategoryDetails> {
+  clearAllTasks() {
+    setState(() {
+      userCategories[widget.idx].userTasks.clear();
+    });
+  }
+
+  updateCard(bool isDone, int idx) {
+    if (isDone) {
+      setState(() {
+        widget.numCompletedTasks--;
+        userCategories[widget.idx].userTasks[idx].isDone = false;
+      });
+    } else {
+      setState(() {
+        widget.numCompletedTasks++;
+        userCategories[widget.idx].userTasks[idx].isDone = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeContext = Theme.of(context).colorScheme;
@@ -52,9 +78,9 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                 Row(
                   children: [
                     Text(
-                      userCategories[widget.idx].tasksCompleted().isNaN
+                      userCategories[widget.idx].tasksRatio().isNaN
                           ? '0/0'
-                          : '${userCategories[widget.idx].tasksCompleted().toInt()}/${userCategories[widget.idx].userTasks.length}',
+                          : '${widget.numCompletedTasks}/${userCategories[widget.idx].userTasks.length}',
                       style:
                           textStyle(24, themeContext.primary, FontWeight.w500),
                     ),
@@ -65,14 +91,12 @@ class _CategoryDetailsState extends State<CategoryDetails> {
             ),
             const SizedBox(height: 10),
             ProgressBar(
-              progressFraction:
-                  userCategories[widget.idx].tasksCompleted().isNaN ||
-                          userCategories[widget.idx].tasksCompleted() /
-                                  userCategories[widget.idx].userTasks.length ==
-                              0
-                      ? 0.05
-                      : userCategories[widget.idx].tasksCompleted() /
-                          userCategories[widget.idx].userTasks.length,
+              progressFraction: userCategories[widget.idx].tasksRatio().isNaN ||
+                      userCategories[widget.idx].tasksRatio() /
+                              userCategories[widget.idx].userTasks.length ==
+                          0
+                  ? 0.05
+                  : userCategories[widget.idx].tasksRatio(),
               catColor: widget.category.color,
             ),
             const SizedBox(height: 10),
@@ -92,12 +116,29 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                           return Column(
                             children: [
                               const SizedBox(height: 10),
-                              QuestCard(task.name, task.isDone),
+                              Dismissible(
+                                onDismissed: (direction) {
+                                  setState(() {
+                                    userCategories[widget.idx].removeTask(task);
+                                  });
+                                },
+                                key: UniqueKey(),
+                                child: QuestCard(
+                                  task.name,
+                                  task.isDone,
+                                  widget.category.color,
+                                  updateCard,
+                                  index,
+                                ),
+                              ),
                             ],
                           );
                         },
                       ),
-                      ClearButton(index: widget.idx),
+                      ClearButton(
+                        index: widget.idx,
+                        onPressed: clearAllTasks,
+                      ),
                     ],
                   ),
           ],

@@ -14,30 +14,27 @@ class AddTaskScreen extends StatefulWidget {
 class _AddTaskScreenState extends State<AddTaskScreen> {
   final TextEditingController _controller = TextEditingController();
 
+  addTask() {
+    if (_controller.text.isNotEmpty && _selectedCategory != null) {
+      for (int i = 0; i < userCategories.length; i++) {
+        if (userCategories[i].name == _selectedCategory) {
+          final newTask = Task(
+            category: userCategories[i],
+            name: _controller.text,
+          );
+          Navigator.pop(context, [newTask, i]);
+          break;
+        }
+      }
+    }
+  }
+
   Map<String, dynamic> categories = {
     for (var i = 0; i < userCategories.length; i++)
       userCategories[i].name: userCategories[i].icon,
   };
 
   String? _selectedCategory;
-
-  void addTask() {
-    if (_controller.text.isNotEmpty && _selectedCategory != null) {
-      Navigator.pop(context, {
-        for (int i = 0; i < userCategories.length; i++)
-          if (userCategories[i].name == _selectedCategory)
-            {
-              setState(() {
-                userCategories[i].addTask(Task(
-                  category: userCategories[i],
-                  name: _controller.text,
-                  isDone: false,
-                ));
-              }),
-            }
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +148,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         child: Text(
                           'Add',
                           style: textStyle(
-                              18, themeContext.primary, FontWeight.w500),
+                            18,
+                            themeContext.primary,
+                            FontWeight.w500,
+                          ),
                         ),
                       ),
                     ),

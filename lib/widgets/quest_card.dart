@@ -5,7 +5,12 @@ import 'package:todo/utils.dart';
 class QuestCard extends StatefulWidget {
   final String questName;
   bool isCompleted;
-  QuestCard(this.questName, this.isCompleted, {super.key});
+  final Color tintColor;
+  Function updateCard;
+  final int idx;
+  QuestCard(this.questName, this.isCompleted, this.tintColor, this.updateCard,
+      this.idx,
+      {super.key});
 
   @override
   State<QuestCard> createState() => _QuestCardState();
@@ -20,6 +25,7 @@ class _QuestCardState extends State<QuestCard> {
       height: 60,
       child: Card(
         color: themeContext.primaryContainer,
+        surfaceTintColor: widget.tintColor,
         elevation: 3,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -32,15 +38,19 @@ class _QuestCardState extends State<QuestCard> {
               ),
               InkWell(
                 onTap: () {
-                  setState(() {
-                    widget.isCompleted = !widget.isCompleted;
-                  });
+                  widget.updateCard(widget.isCompleted, widget.idx);
                 },
                 child: widget.isCompleted
-                    ? Icon(Icons.check_box_rounded,
-                        color: themeContext.secondary, size: 30)
-                    : Icon(Icons.check_box_outline_blank_rounded,
-                        color: themeContext.secondary, size: 30),
+                    ? Icon(
+                        Icons.check_box_rounded,
+                        color: themeContext.secondary,
+                        size: 30,
+                      )
+                    : Icon(
+                        Icons.check_box_outline_blank_rounded,
+                        color: themeContext.secondary,
+                        size: 30,
+                      ),
               ),
             ],
           ),

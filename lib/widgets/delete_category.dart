@@ -3,7 +3,9 @@ import 'package:todo/data/user_data.dart';
 import 'package:todo/utils.dart';
 
 class DeleteCategory extends StatefulWidget {
-  const DeleteCategory({super.key});
+  final dynamic removeCategory;
+
+  const DeleteCategory({required this.removeCategory, super.key});
 
   @override
   State<DeleteCategory> createState() => _DeleteCategoryState();
@@ -19,8 +21,12 @@ class _DeleteCategoryState extends State<DeleteCategory> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
+          final category = userCategories[index];
           return Dismissible(
-            key: UniqueKey(),
+            key: Key(category.id),
+            onDismissed: (direction) {
+              widget.removeCategory(category.id);
+            },
             child: Card(
               color: themeContext.primaryContainer,
               child: ListTile(

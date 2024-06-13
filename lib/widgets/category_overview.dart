@@ -51,9 +51,9 @@ class _CategoryOverviewState extends State<CategoryOverview> {
                 Row(
                   children: [
                     Text(
-                      userCategories[widget.idx].tasksCompleted().isNaN
+                      userCategories[widget.idx].tasksRatio().isNaN
                           ? '0/0'
-                          : '${userCategories[widget.idx].tasksCompleted().toInt()}/${userCategories[widget.idx].userTasks.length}',
+                          : '${userCategories[widget.idx].tasksRatio().toInt()}/${userCategories[widget.idx].userTasks.length}',
                       style:
                           textStyle(24, themeContext.primary, FontWeight.w500),
                     ),
@@ -64,14 +64,12 @@ class _CategoryOverviewState extends State<CategoryOverview> {
             ),
             const SizedBox(height: 10),
             ProgressBar(
-              progressFraction:
-                  userCategories[widget.idx].tasksCompleted().isNaN ||
-                          userCategories[widget.idx].tasksCompleted() /
-                                  userCategories[widget.idx].userTasks.length ==
-                              0
-                      ? 0.05
-                      : userCategories[widget.idx].tasksCompleted() /
-                          userCategories[widget.idx].userTasks.length,
+              progressFraction: userCategories[widget.idx].tasksRatio().isNaN ||
+                      userCategories[widget.idx].tasksRatio() /
+                              userCategories[widget.idx].userTasks.length ==
+                          0
+                  ? 0.05
+                  : userCategories[widget.idx].tasksRatio(),
               catColor: widget.category.color,
             ),
           ],

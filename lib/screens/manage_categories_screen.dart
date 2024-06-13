@@ -4,7 +4,10 @@ import 'package:todo/widgets/add_category.dart';
 import 'package:todo/widgets/delete_category.dart';
 
 class ManageCategoriesScreen extends StatefulWidget {
-  const ManageCategoriesScreen({super.key});
+  final dynamic addCategory;
+  final dynamic removeCategory;
+  const ManageCategoriesScreen(
+      {required this.addCategory, required this.removeCategory, super.key});
 
   @override
   State<ManageCategoriesScreen> createState() => _ManageCategoriesScreenState();
@@ -89,7 +92,9 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: isAdding ? const AddCategory() : const DeleteCategory(),
+              child: isAdding
+                  ? AddCategory(addCategory: widget.addCategory)
+                  : DeleteCategory(removeCategory: widget.removeCategory),
             ),
           ],
         ),

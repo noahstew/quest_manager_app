@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/models/category.dart';
 import 'package:todo/screens/add_task_screen.dart';
 import 'package:todo/utils.dart';
 import 'package:todo/widgets/category_details.dart';
@@ -16,6 +17,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  removeCategory(String id) {
+    setState(() {
+      userCategories.removeWhere((element) => element.id == id);
+    });
+  }
+
+  addCategory(Category newCategory) {
+    setState(() {
+      userCategories.add(newCategory);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeContext = Theme.of(context).colorScheme;
@@ -44,13 +57,19 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         elevation: 4,
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final newTask = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const AddTaskScreen(),
             ),
           );
+
+          if (newTask != null) {
+            setState(() {
+              userCategories[newTask[1]].addTask(newTask[0]);
+            });
+          }
         },
         backgroundColor: themeContext.surface,
         child: Icon(Icons.add_rounded, color: themeContext.primary, size: 30),
@@ -62,7 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // TODO: Make summary widget
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -76,7 +94,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           setState(() {
                             userCategories[index].isExpanded = !isExpanded;
                           });
-                          print(userCategories[index].userTasks.length);
                         },
                         child: !isExpanded
                             ? CategoryOverview(
@@ -86,6 +103,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             : CategoryDetails(
                                 category: userCategories[index],
                                 idx: index,
+                                numCompletedTasks: userCategories[index]
+                                    .userTasks
+                                    .where((task) => task.isDone)
+                                    .length,
                               ),
                       ),
                       if (index != userCategories.length - 1)
@@ -94,7 +115,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-              const ManageCategoriesButton(),
+              ManageCategoriesButton(
+                  addCategory: addCategory, removeCategory: removeCategory),
             ],
           ),
         ),
