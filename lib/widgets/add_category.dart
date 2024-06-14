@@ -74,6 +74,7 @@ class _AddCategoryState extends State<AddCategory> {
             );
           }),
         ),
+        const SizedBox(height: 16),
         GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
