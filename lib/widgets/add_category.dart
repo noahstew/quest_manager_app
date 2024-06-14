@@ -118,13 +118,19 @@ class _AddCategoryState extends State<AddCategory> {
             ),
             child: TextButton(
               onPressed: () {
-                final newCategory = Category(
-                  name: _controller.text,
-                  icon: _selectedIcon!,
-                  color: _selectedColor!,
-                );
-                Navigator.pop(context);
-                widget.addCategory(newCategory);
+                if (_controller.text.isEmpty ||
+                    _selectedColor == null ||
+                    _selectedIcon == null) {
+                  return;
+                } else {
+                  final newCategory = Category(
+                    name: _controller.text,
+                    icon: _selectedIcon!,
+                    color: _selectedColor!,
+                  );
+                  Navigator.pop(context);
+                  widget.addCategory(newCategory);
+                }
               },
               child: Text(
                 'Add to Category List',

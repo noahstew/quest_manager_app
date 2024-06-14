@@ -53,7 +53,7 @@ class _CategoryOverviewState extends State<CategoryOverview> {
                     Text(
                       userCategories[widget.idx].tasksRatio().isNaN
                           ? '0/0'
-                          : '${userCategories[widget.idx].tasksRatio().toInt()}/${userCategories[widget.idx].userTasks.length}',
+                          : '${(userCategories[widget.idx].tasksRatio() * userCategories[widget.idx].userTasks.length).toInt()}/${userCategories[widget.idx].userTasks.length}',
                       style:
                           textStyle(24, themeContext.primary, FontWeight.w500),
                     ),

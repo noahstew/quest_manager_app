@@ -20,7 +20,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       for (int i = 0; i < userCategories.length; i++) {
         if (userCategories[i].name == _selectedCategory) {
           final newTask = Task(
-            category: userCategories[i],
             name: _controller.text,
           );
           Navigator.pop(context, [newTask, i]);

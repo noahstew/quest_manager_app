@@ -109,71 +109,74 @@ class _HomeScreenState extends State<HomeScreen> {
                         elevation: 2,
                         color: themeContext.primaryContainer,
                         shadowColor: themeContext.primary,
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 16),
-                            Text(
-                              'Welcome to Side Questor!',
-                              style: textStyle(
-                                  30, themeContext.primary, FontWeight.bold),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              '(Continue reading for how to use)',
-                              style: textStyle(
-                                  16, themeContext.primary, FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                            Divider(
-                              color: themeContext.primary,
-                              thickness: 1.0,
-                              indent: 16,
-                              endIndent: 16,
-                            ),
-                            Text(
-                              'Add a category with Manage Categories button below',
-                              style: textStyle(
-                                  20, themeContext.primary, FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                            Divider(
-                              color: themeContext.primary,
-                              thickness: 1.0,
-                              indent: 96,
-                              endIndent: 96,
-                            ),
-                            Text(
-                              'Then add tasks to your categories with the + button below',
-                              style: textStyle(
-                                  20, themeContext.primary, FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                            Divider(
-                              color: themeContext.primary,
-                              thickness: 1.0,
-                              indent: 96,
-                              endIndent: 96,
-                            ),
-                            Text(
-                              'Delete categories and tasks by swiping them left or right',
-                              style: textStyle(
-                                  20, themeContext.primary, FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                            Divider(
-                              color: themeContext.primary,
-                              thickness: 1.0,
-                              indent: 96,
-                              endIndent: 96,
-                            ),
-                            Text(
-                              'Expand categories by long pressing them',
-                              style: textStyle(
-                                  20, themeContext.primary, FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 16),
-                          ],
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 16),
+                              Text(
+                                'Welcome to Side Questor!',
+                                style: textStyle(
+                                    30, themeContext.primary, FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                '(Continue reading for how to use)',
+                                style: textStyle(
+                                    16, themeContext.primary, FontWeight.w500),
+                                textAlign: TextAlign.center,
+                              ),
+                              Divider(
+                                color: themeContext.primary,
+                                thickness: 1.0,
+                                indent: 16,
+                                endIndent: 16,
+                              ),
+                              Text(
+                                'Add a category with Manage Categories button below',
+                                style: textStyle(
+                                    20, themeContext.primary, FontWeight.w500),
+                                textAlign: TextAlign.center,
+                              ),
+                              Divider(
+                                color: themeContext.primary,
+                                thickness: 1.0,
+                                indent: 96,
+                                endIndent: 96,
+                              ),
+                              Text(
+                                'Then add tasks to your categories with the + button below',
+                                style: textStyle(
+                                    20, themeContext.primary, FontWeight.w500),
+                                textAlign: TextAlign.center,
+                              ),
+                              Divider(
+                                color: themeContext.primary,
+                                thickness: 1.0,
+                                indent: 96,
+                                endIndent: 96,
+                              ),
+                              Text(
+                                'Delete categories and tasks by swiping them left or right',
+                                style: textStyle(
+                                    20, themeContext.primary, FontWeight.w500),
+                                textAlign: TextAlign.center,
+                              ),
+                              Divider(
+                                color: themeContext.primary,
+                                thickness: 1.0,
+                                indent: 96,
+                                endIndent: 96,
+                              ),
+                              Text(
+                                'Expand categories by long pressing them',
+                                style: textStyle(
+                                    20, themeContext.primary, FontWeight.w500),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 16),
+                            ],
+                          ),
                         ),
                       ),
                     )
@@ -191,6 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   userCategories[index].isExpanded =
                                       !isExpanded;
                                 });
+                                writeData();
                               },
                               child: !isExpanded
                                   ? CategoryOverview(

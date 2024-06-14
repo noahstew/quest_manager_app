@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'category.dart';
 
 part '../adapters/task.g.dart';
 
@@ -8,13 +7,12 @@ class Task extends HiveObject {
   @HiveField(0)
   String name;
 
-  @HiveField(1)
-  Category category;
-
   @HiveField(2)
   bool isDone = false;
 
-  Task({required this.name, required this.category});
+  Task({
+    required this.name,
+  });
 
   void toggleDone() {
     isDone = !isDone;
