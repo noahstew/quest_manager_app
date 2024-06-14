@@ -11,11 +11,13 @@ class CategoryDetails extends StatefulWidget {
   final Category category;
   final int idx;
   int numCompletedTasks;
+  final Function writeData;
 
   CategoryDetails(
       {required this.category,
       required this.idx,
       required this.numCompletedTasks,
+      required this.writeData,
       super.key});
 
   @override
@@ -27,6 +29,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
     setState(() {
       userCategories[widget.idx].userTasks.clear();
     });
+    widget.writeData();
   }
 
   updateCard(bool isDone, int idx) {
@@ -41,6 +44,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
         userCategories[widget.idx].userTasks[idx].isDone = true;
       });
     }
+    widget.writeData();
   }
 
   @override
@@ -97,7 +101,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                           0
                   ? 0.05
                   : userCategories[widget.idx].tasksRatio(),
-              catColor: widget.category.color!,
+              catColor: widget.category.color,
             ),
             const SizedBox(height: 10),
             widget.category.userTasks.isEmpty
@@ -125,13 +129,14 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                                       widget.numCompletedTasks--;
                                     }
                                     userCategories[widget.idx].removeTask(task);
+                                    widget.writeData();
                                   });
                                 },
                                 key: UniqueKey(),
                                 child: QuestCard(
                                   task.name,
                                   task.isDone,
-                                  widget.category.color!,
+                                  widget.category.color,
                                   updateCard,
                                   index,
                                 ),

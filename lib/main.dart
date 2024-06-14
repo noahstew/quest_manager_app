@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
+import 'package:todo/adapters/color_adapter.dart';
+import 'package:todo/adapters/icondata_adapter.dart';
+import 'package:todo/models/category.dart';
+import 'package:todo/models/task.dart';
 import 'package:todo/screens/home_screen.dart';
 import 'package:todo/utils.dart';
 
 void main() async {
   await Hive.initFlutter();
+  Hive.registerAdapter(CategoryAdapter());
+  Hive.registerAdapter(TaskAdapter());
+  Hive.registerAdapter(IconDataAdapter());
+  Hive.registerAdapter(ColorAdapter());
   var myBox = await Hive.openBox('myBox');
   runApp(MyApp(myBox: myBox));
 }

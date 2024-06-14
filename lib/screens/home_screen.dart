@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:todo/models/category.dart';
 import 'package:todo/screens/add_task_screen.dart';
 import 'package:todo/utils.dart';
@@ -17,13 +18,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _myBox = Hive.box('myBox');
+
+  readData() {
+    if (_myBox.get('userCategories') != null) {
+      userCategories = (_myBox.get('userCategories') as List).cast<Category>();
+    }
+  }
+
+  writeData() {
+    _myBox.put('userCategories', userCategories);
+  }
+
   removeCategory(String id) {
+    writeData();
     setState(() {
       userCategories.removeWhere((element) => element.id == id);
     });
   }
 
   addCategory(Category newCategory) {
+    writeData();
     setState(() {
       userCategories.add(newCategory);
     });
@@ -32,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // TODO: implement initState
+    readData();
     super.initState();
   }
 
@@ -67,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final newTask = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const AddTaskScreen(),
+              builder: (context) => AddTaskScreen(writeData: writeData),
             ),
           );
 
@@ -184,6 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   : CategoryDetails(
                                       category: userCategories[index],
                                       idx: index,
+                                      writeData: writeData,
                                       numCompletedTasks: userCategories[index]
                                           .userTasks
                                           .where((task) => task.isDone)
@@ -197,7 +214,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
               ManageCategoriesButton(
-                  addCategory: addCategory, removeCategory: removeCategory),
+                addCategory: addCategory,
+                removeCategory: removeCategory,
+              ),
             ],
           ),
         ),

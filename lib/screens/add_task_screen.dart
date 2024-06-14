@@ -5,7 +5,8 @@ import 'package:todo/models/task.dart';
 import 'package:todo/utils.dart';
 
 class AddTaskScreen extends StatefulWidget {
-  const AddTaskScreen({super.key});
+  final Function writeData;
+  const AddTaskScreen({required this.writeData, super.key});
 
   @override
   State<AddTaskScreen> createState() => _AddTaskScreenState();
@@ -26,6 +27,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           break;
         }
       }
+      widget.writeData();
     }
   }
 
