@@ -5,22 +5,33 @@ import 'package:todo/utils.dart';
 
 void main() async {
   await Hive.initFlutter();
-  runApp(const MyApp());
-
-  var userCategoriesBox = await Hive.openBox('userCategories');
+  var myBox = await Hive.openBox('myBox');
+  runApp(MyApp(myBox: myBox));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final Box myBox;
+  const MyApp({super.key, required this.myBox});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  late final Box _isDarkModeBox;
   bool isDarkMode = false;
 
+  @override
+  void initState() {
+    _isDarkModeBox = widget.myBox;
+    if (_isDarkModeBox.get('isDarkMode') != null) {
+      isDarkMode = _isDarkModeBox.get('isDarkMode');
+    }
+    super.initState();
+  }
+
   void toggleDarkMode() {
+    _isDarkModeBox.put('isDarkMode', !isDarkMode);
     setState(() {
       isDarkMode = !isDarkMode;
     });

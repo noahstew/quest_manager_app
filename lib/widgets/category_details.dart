@@ -97,7 +97,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                           0
                   ? 0.05
                   : userCategories[widget.idx].tasksRatio(),
-              catColor: widget.category.color,
+              catColor: widget.category.color!,
             ),
             const SizedBox(height: 10),
             widget.category.userTasks.isEmpty
@@ -131,7 +131,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                                 child: QuestCard(
                                   task.name,
                                   task.isDone,
-                                  widget.category.color,
+                                  widget.category.color!,
                                   updateCard,
                                   index,
                                 ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:todo/models/category.dart';
 import 'package:todo/screens/add_task_screen.dart';
 import 'package:todo/utils.dart';
@@ -18,22 +17,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _userCategoriesBox = Hive.box('userCategories');
-
-  void writeData() {
-    _userCategoriesBox.put('userCategories', userCategories);
-  }
-
-  void readData() {
-    if (_userCategoriesBox.get('userCategories') != null) {
-      userCategories = _userCategoriesBox.get('userCategories');
-    }
-  }
-
-  void deleteData() {
-    _userCategoriesBox.delete('userCategories');
-  }
-
   removeCategory(String id) {
     setState(() {
       userCategories.removeWhere((element) => element.id == id);
@@ -44,6 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       userCategories.add(newCategory);
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override

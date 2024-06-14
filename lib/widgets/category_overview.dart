@@ -70,7 +70,7 @@ class _CategoryOverviewState extends State<CategoryOverview> {
                           0
                   ? 0.05
                   : userCategories[widget.idx].tasksRatio(),
-              catColor: widget.category.color,
+              catColor: widget.category.color!,
             ),
           ],
         ),
